@@ -2,6 +2,15 @@
 
 13 hverdagsretter til 2 voksne og et barn: ugeplan, indkøbsliste per ret og kokketilstand med timer.
 
+**Funktioner**
+- 🍽️ 13 retter med filtre (vegetar, under 35 min, under 700 kcal, kan forberedes aftenen før)
+- 🎲 "Overrask mig": vælger en tilfældig ret ud fra dine filtre
+- 👥 Antal personer (1-12): ingredienser, indkøbsliste og kokketilstand regnes om
+- 🔥 Anslåede kalorier pr. person
+- 🗓️ Ugens retter, og 🛒 indkøbsliste per ret, som kan deles via SMS eller Beskeder
+- 👩‍🍳 Kokketilstand: ét trin ad gangen, timer med notifikation, lyd og vibration; skærmen holdes tændt
+- 🌓 Dag- og nattilstand: Auto, Lys eller Mørk
+
 - `www/index.html`: hele appen (HTML, CSS og JavaScript i én fil)
 - `ios/`: det native iOS-projekt, som pakker appen ind (Capacitor 8, Swift Package Manager)
 - `resources/`: kildebilleder til app-ikon og opstartsskærm
@@ -54,5 +63,6 @@ npx cap open ios      # åbner Xcode
 Ret i `www/index.html`. Kør derefter `npx cap sync ios`, hæv **Build**-nummeret (og eventuelt **Version**) i Xcode, og arkivér og upload igen.
 
 ## Godt at vide
-- Apple afviser nogle gange apps, der "bare er en hjemmeside" (retningslinje 4.2). Aftenret fungerer helt uden internet og har egen funktionalitet, hvilket taler for appen. Hvis den alligevel bliver afvist, kan native funktioner som notifikation når timeren er færdig, eller at skærmen holdes tændt i kokketilstand, styrke ansøgningen.
+- Første gang du starter en timer, spørger appen om lov til at sende notifikationer. Så får du besked, når timeren er færdig, også når telefonen er låst.
+- Apple afviser nogle gange apps, der "bare er en hjemmeside" (retningslinje 4.2). Aftenret fungerer helt uden internet og har egen funktionalitet, hvilket taler for appen. Den bruger desuden native funktioner (notifikationer, vibration, deling og at holde skærmen tændt), hvilket styrker ansøgningen.
 - App-ikonet i `resources/icon.png` er en enkel første version. Udskift det gerne med et designet ikon (1024 × 1024 px uden gennemsigtighed) i `ios/App/App/Assets.xcassets/AppIcon.appiconset/`.

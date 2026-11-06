@@ -3,11 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light only">
-<meta name="theme-color" content="#f5f4f0">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f4f0" id="themeColor">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <title>Aftenret</title>
+<script>
+try{var m=localStorage.getItem('aftenret_theme')||'auto';document.documentElement.dataset.theme=m==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):m;}catch(e){}
+</script>
 <style>
 :root{
   color-scheme:light;
@@ -22,11 +25,37 @@
   --herb-soft:#e6f3ec;
   --radius:18px;
   --shadow:0 1px 2px rgba(20,20,20,.04),0 6px 18px rgba(20,20,20,.06);
+  --hero-meat:linear-gradient(135deg,#ffe3d6,#ffc9b3);
+  --hero-veg:linear-gradient(135deg,#dff2e5,#bfe5cc);
+  --hero-sub:#4a4a4f;
+  --note:#fff6e2;
+  --extra:#b97800;
+  --extra-bg:#fff1d1;
+  --danger-bg:#fdecea;
+  --glass:rgba(255,255,255,.86);
+  --check-bg:#fff;
+  --check-line:#c7c7cc;
+  --muted:#aeaeb2;
+  --tab-line:rgba(0,0,0,.12);
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
   --font-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--paper) !important;color-scheme:light}
+/* ---------- nat-tilstand ---------- */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ink:#f2f2f3;--ink-soft:#a1a1a8;--paper:#111312;--card:#1d201e;--line:#2e322f;
+  --herb:#4cc283;--herb-soft:#1f3a2b;--pomegranate:#ff7a66;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  --hero-meat:linear-gradient(135deg,#4a2a22,#5e3226);
+  --hero-veg:linear-gradient(135deg,#1e3a2a,#24503a);
+  --hero-sub:#d0d0d4;--note:#3a3020;--extra:#f2b950;--extra-bg:#3d3220;--danger-bg:#3d2220;
+  --glass:rgba(29,32,30,.86);--check-bg:#1d201e;--check-line:#4a4f4c;--muted:#6d6d72;--tab-line:rgba(255,255,255,.1);
+}
+:root[data-theme="dark"] .chip[aria-pressed="true"],:root[data-theme="dark"] .cta:not(.ghost),
+:root[data-theme="dark"] .weekAction.shop:not(.done),:root[data-theme="dark"] .surprise{color:#0d1f15}
+:root[data-theme="dark"] .checkCircle.checked::after{color:#0d1f15}
 html,body{margin:0;padding:0}
 body{
   background:var(--paper) !important;
@@ -76,9 +105,9 @@ header.top p{margin:6px 0 0;color:var(--ink-soft);font-size:.95rem;max-width:46c
 .dish:active{transform:scale(.985)}
 .dish .stripe{
   display:flex;align-items:center;justify-content:center;height:128px;font-size:3.4rem;
-  background:linear-gradient(135deg,#ffe3d6,#ffc9b3);
+  background:var(--hero-meat);
 }
-.dish.veg .stripe{background:linear-gradient(135deg,#dff2e5,#bfe5cc)}
+.dish.veg .stripe{background:var(--hero-veg)}
 .dish .body{padding:13px 16px 16px;flex:1;min-width:0;text-align:left;display:block;width:100%}
 .dish h3{font-size:1.12rem;font-weight:700;display:flex;align-items:center;flex-wrap:wrap;gap:4px 0;padding-right:44px}
 .dish h3 .emoji{display:none}
@@ -86,29 +115,29 @@ header.top p{margin:6px 0 0;color:var(--ink-soft);font-size:.95rem;max-width:46c
 .badge{display:inline-block;margin-left:8px;font-size:.68rem;font-weight:700;color:var(--herb);background:var(--herb-soft);padding:3px 9px;border-radius:999px;white-space:nowrap;letter-spacing:0}
 .dish .meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:7px;font-size:.84rem;color:var(--ink-soft);font-weight:500}
 .tag{display:inline-flex;align-items:center;gap:4px}
-.tag.prep{color:#b97800;font-weight:700}
+.tag.prep{color:var(--extra);font-weight:700}
 .dish .side{display:block;font-size:.84rem;color:var(--ink-soft);margin-top:6px;line-height:1.4}
 
 /* ---------- detalje ---------- */
 .back{
   position:sticky;top:calc(env(safe-area-inset-top) + 8px);z-index:5;
   padding:8px 14px;margin:4px 0 12px;font-weight:600;font-size:.95rem;color:var(--herb);
-  background:rgba(255,255,255,.85);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  background:var(--glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
   border-radius:999px;box-shadow:var(--shadow);
 }
 .detail-head{
-  background:linear-gradient(135deg,#ffe3d6,#ffc9b3);border-radius:24px;padding:26px 20px 22px;
+  background:var(--hero-meat);border-radius:24px;padding:26px 20px 22px;
 }
-.detail-head.veg{background:linear-gradient(135deg,#dff2e5,#bfe5cc)}
+.detail-head.veg{background:var(--hero-veg)}
 .detail-head .emoji{display:block;font-size:3.6rem;margin:0 0 10px;line-height:1}
 .detail-head h2{font-size:1.85rem}
-.detail-head .sub{color:#4a4a4f;margin:8px 0 0;font-size:.95rem}
+.detail-head .sub{color:var(--hero-sub);margin:8px 0 0;font-size:.95rem}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:14px 0 4px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 4px}
 .fact{text-align:center;font-size:.75rem;color:var(--ink-soft);font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:0 6px;border-left:1px solid var(--line)}
 .fact:first-child{border-left:0}
 .fact b{display:block;font-size:.98rem;color:var(--ink);text-transform:none;letter-spacing:0;margin-top:3px}
 .note{
-  background:#fff6e2;border-radius:var(--radius);padding:14px 16px;margin:14px 0;font-size:.94rem;
+  background:var(--note);border-radius:var(--radius);padding:14px 16px;margin:14px 0;font-size:.94rem;
 }
 .sec-title{font-size:1.35rem;margin:28px 2px 12px}
 ul.ing{list-style:none;padding:4px 16px;margin:0;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
@@ -118,7 +147,7 @@ ul.ing li{
 }
 ul.ing li:last-child{border-bottom:0}
 ul.ing .amt{font-variant-numeric:tabular-nums;font-weight:700;min-width:70px;flex:0 0 70px;color:var(--herb)}
-ul.ing .extra,.shopIngList .extra{color:#b97800;font-weight:700;font-size:.72rem;margin-left:6px;background:#fff1d1;padding:2px 7px;border-radius:999px}
+ul.ing .extra,.shopIngList .extra{color:var(--extra);font-weight:700;font-size:.72rem;margin-left:6px;background:var(--extra-bg);padding:2px 7px;border-radius:999px}
 ul.ing .staple{color:var(--herb);font-weight:700;font-size:.72rem;margin-left:6px;background:var(--herb-soft);padding:2px 7px;border-radius:999px;white-space:nowrap}
 ol.steps{padding:18px 16px 4px;margin:0;list-style:none;counter-reset:s;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
 ol.steps li{
@@ -170,8 +199,8 @@ ol.steps li::before{
 /* ---------- bundnav (iOS tab bar) ---------- */
 nav.tabs{
   position:fixed;left:0;right:0;bottom:0;display:flex;
-  background:rgba(255,255,255,.86);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
-  border-top:.5px solid rgba(0,0,0,.12);
+  background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  border-top:.5px solid var(--tab-line);
   padding-bottom:env(safe-area-inset-bottom);z-index:10;
 }
 nav.tabs button{flex:1;padding:8px 4px 6px;font-size:.68rem;font-weight:600;color:#8e8e93;display:flex;flex-direction:column;align-items:center;gap:3px}
@@ -182,19 +211,19 @@ nav.tabs.hidden{display:none}
 
 /* ---------- ugens retter ---------- */
 .weekBtn{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;
-  background:rgba(255,255,255,.9);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  background:var(--glass);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .weekBtn input{width:22px;height:22px;accent-color:var(--herb);cursor:pointer;margin:0}
 .weekRow{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:12px}
 .weekRowTitle{display:flex;align-items:center;gap:2px;width:100%;text-align:left;margin-bottom:12px}
-.weekRowTitle .emoji{flex:0 0 52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#ffe3d6,#ffc9b3);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-right:12px}
-.weekRowTitle.veg .emoji{background:linear-gradient(135deg,#dff2e5,#bfe5cc)}
+.weekRowTitle .emoji{flex:0 0 52px;height:52px;border-radius:14px;background:var(--hero-meat);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-right:12px}
+.weekRowTitle.veg .emoji{background:var(--hero-veg)}
 .weekRowText{display:flex;flex-direction:column;gap:3px;font-weight:700;font-size:1.03rem;line-height:1.25}
 .weekRowMeta{font-weight:500;font-size:.82rem;color:var(--ink-soft)}
 .weekRowActions{display:flex;gap:8px}
 .weekAction{flex:1;font-size:.86rem;font-weight:700;padding:11px 6px;border-radius:999px;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px}
 .weekAction.shop{background:var(--herb);color:#fff}
 .weekAction.shop.done{background:var(--herb-soft);color:var(--herb)}
-.weekAction.remove{background:#fdecea;color:var(--pomegranate)}
+.weekAction.remove{background:var(--danger-bg);color:var(--pomegranate)}
 .count.small{margin-top:0}
 
 /* ---------- indkøb (per ret) ---------- */
@@ -209,14 +238,43 @@ nav.tabs.hidden{display:none}
 .shopIngList{list-style:none;margin:8px 0 0;padding:0}
 .shopIngList li{display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line)}
 .shopIngList li:last-child{border-bottom:0}
-.shopIngList li.bought span{color:#aeaeb2;text-decoration:line-through}
+.shopIngList li.bought span{color:var(--muted);text-decoration:line-through}
 .shopIngList li.shopAllDone{color:var(--ink-soft);border-bottom:0}
-.checkCircle{width:26px;height:26px;border-radius:50%;border:2px solid #c7c7cc;background:#fff;flex:0 0 26px;position:relative;transition:background .15s,border-color .15s}
+.checkCircle{width:26px;height:26px;border-radius:50%;border:2px solid var(--check-line);background:var(--check-bg);flex:0 0 26px;position:relative;transition:background .15s,border-color .15s}
 .checkCircle.checked{background:var(--herb);border-color:var(--herb)}
 .checkCircle.checked::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
 .shopDoneToggle{margin-top:8px;color:var(--ink-soft);font-weight:700;font-size:.86rem;display:flex;align-items:center;gap:6px}
 .shopDoneToggle .chev{font-size:.75rem}
 .doneList{margin-top:4px}
+/* ---------- nye elementer ---------- */
+header.top{position:relative}
+.headRow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.iconBtn{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center;font-size:1.15rem;margin-top:4px}
+.surprise{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:6px 0 4px;padding:14px;
+  border-radius:var(--radius);font-weight:700;color:#fff;background:linear-gradient(120deg,var(--herb),#3aa56b 60%,var(--saffron));box-shadow:var(--shadow)}
+.tag.kcal{color:var(--pomegranate);font-weight:600}
+.servings{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;margin:12px 0 4px}
+.servings .lbl{flex:1;min-width:0}
+.servings .lbl b{display:block;font-size:1rem}
+.servings .lbl small{display:block;color:var(--ink-soft);font-size:.8rem;line-height:1.35;margin-top:2px}
+.stepper{display:flex;align-items:center;gap:4px;background:var(--paper);border-radius:999px;padding:4px}
+.stepper button{width:38px;height:38px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);font-size:1.3rem;font-weight:700;color:var(--herb);line-height:1}
+.stepper button:disabled{opacity:.35}
+.stepper output{min-width:34px;text-align:center;font-weight:800;font-size:1.15rem;font-variant-numeric:tabular-nums}
+ul.ing .amt.scaled{color:var(--extra)}
+.kcalNote{color:var(--ink-soft);font-size:.78rem;margin:8px 4px 0}
+.shareBtn{display:inline-flex;align-items:center;gap:6px;margin:4px 0 6px;padding:10px 16px;border-radius:999px;background:var(--card);box-shadow:var(--shadow);font-weight:700;font-size:.9rem;color:var(--herb)}
+.portionTag{font-size:.72rem;font-weight:700;color:var(--ink-soft);background:var(--paper);padding:2px 8px;border-radius:999px;margin-right:8px;flex:0 0 auto}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 84px);transform:translate(-50%,20px);opacity:0;
+  background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:999px;font-weight:600;font-size:.9rem;z-index:50;
+  transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.cookIngs{margin:26px 0 18px;color:#cfe0d6;font-size:.95rem}
+.cookIngs summary{cursor:pointer;font-weight:700;color:#9fb5a8;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
+.cookIngs ul{list-style:none;padding:8px 0 0;margin:0;columns:2;column-gap:18px}
+.cookIngs li{padding:3px 0;break-inside:avoid}
+.cookIngs b{color:var(--saffron)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -225,10 +283,14 @@ nav.tabs.hidden{display:none}
 <!-- OVERSIGT -->
 <section id="list" class="screen active">
   <header class="top">
-    <h1>🍽️ Aftenret</h1>
+    <div class="headRow">
+      <h1>🍽️ Aftenret</h1>
+      <button class="iconBtn" id="themeBtn" onclick="cycleTheme()" aria-label="Skift mellem dag- og nattilstand">🌓</button>
+    </div>
     <p>13 hverdagsretter til 2 voksne og et barn. Alle kan laves af én person på under 45 minutter.</p>
   </header>
   <div class="filters" id="filters"></div>
+  <button class="surprise" onclick="surprise()">🎲 Overrask mig – hvad skal vi have i aften?</button>
   <p class="count" id="count"></p>
   <div id="dishes"></div>
 </section>
@@ -260,6 +322,7 @@ nav.tabs.hidden{display:none}
     <button id="prevBtn" onclick="step(-1)">Forrige</button>
     <button id="nextBtn" class="primary" onclick="step(1)">Næste</button>
   </div>
+  <details class="cookIngs" id="cookIngs"></details>
 </section>
 
 <!-- INDKØB -->
@@ -268,10 +331,12 @@ nav.tabs.hidden{display:none}
     <h1>🛒 Indkøb</h1>
     <p>Ingredienser vist per ret. Kryds af når du har købt en vare.</p>
   </header>
+  <button class="shareBtn" id="shareBtn" onclick="shareList()" hidden>📤 Del indkøbsliste</button>
   <p class="count" id="shopCount"></p>
   <div id="shopList"></div>
 </section>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <nav class="tabs" id="tabs">
   <button onclick="go('list')" aria-current="true" id="tabList"><span class="tabIcon">🍽️</span>Retter</button>
   <button onclick="go('week')" id="tabWeek"><span class="tabIcon">🗓️</span>Ugens retter</button>
@@ -347,16 +412,22 @@ const R = [
  steps:[{"t":"Hak løg og hvidløg. Svits det i olie i 5 minutter, til løget er blødt.","timer":300},{"t":"Sæt evt. ris over, hvis I spiser det til: dobbelt vand, salt, låg på, 12 minutter.","timer":720},{"t":"Tilsæt tørret koriander og steg et minut mere."},{"t":"Kom linser, hakkede tomater og vand eller bouillon i. Lad det koge op."},{"t":"Skru ned og lad dalen simre under låg i 18 minutter, til linserne er møre og gryden er tyknet.","timer":1080},{"t":"Smag til med salt. Server med ris eller rugbrød – en mild og blød ret der er nem for den 3-årige at spise."}]}
 ];
 
+/* ===== KALORIER: anslået pr. person (hele opskriften inkl. tilbehør / 3 personer) ===== */
+const KCAL={1:640,2:585,3:365,4:715,5:675,6:1100,7:1030,8:620,9:765,10:695,11:760,12:835,13:665};
+R.forEach(r=>r.kcal=KCAL[r.id]);
+const BASE_PERSONS=3; /* opskrifterne er skrevet til 2 voksne + 1 barn */
+
 /* ===== STATE ===== */
-let filters={veg:false,prep:false,hurtig:false};
+let filters={veg:false,prep:false,hurtig:false,let:false};
 let current=null,idx=0,timerId=null,left=0,ringing=false,detailOrigin='list',endAt=0;
+const servings={};
 const weekPicked=new Set(), shopPicked=new Set(), boughtItems=new Set(), openDoneSections=new Set(), collapsedDishes=new Set();
 let dbRef=null;
 
 /* ===== GEM/HENT (localStorage som hurtig cache + db-capability som pålidelig, holdbar lagring) ===== */
 const STORAGE_KEY = 'aftenret_state_v1';
 function currentPayload(){
-  return { week:[...weekPicked], shop:[...shopPicked], bought:[...boughtItems] };
+  return { week:[...weekPicked], shop:[...shopPicked], bought:[...boughtItems], servings:{...servings} };
 }
 function saveState(){
   const payload = currentPayload();
@@ -372,6 +443,7 @@ function loadState(){
     (s.week||[]).forEach(id=>weekPicked.add(id));
     (s.shop||[]).forEach(id=>shopPicked.add(id));
     (s.bought||[]).forEach(k=>boughtItems.add(k));
+    Object.assign(servings, s.servings||{});
   }catch(e){ /* ignorer korrupt/manglende gemt data */ }
 }
 async function initDb(){
@@ -387,6 +459,7 @@ async function initDb(){
       (s.week||[]).forEach(id=>weekPicked.add(id));
       (s.shop||[]).forEach(id=>shopPicked.add(id));
       (s.bought||[]).forEach(k=>boughtItems.add(k));
+      Object.assign(servings, s.servings||{});
     } else if(weekPicked.size || shopPicked.size || boughtItems.size){
       await dbRef.set(currentPayload());
     }
@@ -405,6 +478,34 @@ function isPantryStaple(name){
   const firstWord = n.split(',')[0].trim().split(/\s+/)[0];
   return PANTRY_SINGLE.includes(firstWord);
 }
+
+/* ===== ANTAL PERSONER + OMREGNING AF MÆNGDER ===== */
+function personsFor(id){ return servings[id] || BASE_PERSONS; }
+const FRAC={'½':.5,'¼':.25,'¾':.75};
+function fmtNum(v,step){
+  v=Math.max(step,Math.round(v/step)*step);
+  const whole=Math.floor(v+1e-9), f=Math.round((v-whole)*4)/4;
+  const fs=f===.25?'¼':f===.5?'½':f===.75?'¾':'';
+  return (whole?String(whole):(fs?'':'0'))+fs;
+}
+function scaleAmt(amt, persons){
+  if(!amt || persons===BASE_PERSONS) return amt;
+  const m=String(amt).match(/^(\d+)?\s*([½¼¾])?\s*(.*)$/);
+  if(!m || (!m[1] && !m[2])) return amt;
+  const v=(m[1]?parseInt(m[1],10):0)+(m[2]?FRAC[m[2]]:0);
+  const unit=m[3].trim(), x=v*persons/BASE_PERSONS;
+  let out;
+  if(unit==='g'){
+    const g=x>=100?Math.round(x/25)*25:Math.max(5,Math.round(x/5)*5);
+    if(g>=1000) return String(Math.round(g/50)/20).replace('.',',')+' kg';
+    out=String(g);
+  }
+  else if(unit==='fed'||unit==='ds') out=String(Math.max(1,Math.round(x)));
+  else if(unit==='dl'||unit==='tsk'||unit==='spsk') out=fmtNum(x,.25);
+  else out=fmtNum(x,.5);
+  return unit?out+' '+unit:out;
+}
+function personsLabel(n){ return n===BASE_PERSONS ? '2 voksne + 1 barn' : n+' '+(n===1?'person':'personer'); }
 
 /* ===== EMOJI PR. RET ===== */
 function emojiFor(r){
@@ -426,15 +527,96 @@ function go(id){
   document.getElementById('tabWeek').setAttribute('aria-current',id==='week');
   document.getElementById('tabShop').setAttribute('aria-current',id==='shop');
   window.scrollTo(0,0);
-  if(id!=='cook') stopTimer();
-  /* iOS-app: lys statuslinje-tekst i den mørke kokketilstand */
-  try{ const sb=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.StatusBar; if(sb) sb.setStyle({style:id==='cook'?'DARK':'LIGHT'}).catch(()=>{}); }catch(e){}
+  if(id!=='cook'){ stopTimer(); keepAwake(false); }
+  currentScreen=id;
+  updateStatusBar();
+}
+let currentScreen='list';
+/* ===== NATIVE HJÆLPERE (virker i iOS-appen; falder pænt tilbage i browseren) ===== */
+function plugin(name){ try{ return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins[name]||null; }catch(e){ return null; } }
+function updateStatusBar(){
+  const sb=plugin('StatusBar'); if(!sb) return;
+  const dark = currentScreen==='cook' || document.documentElement.dataset.theme==='dark';
+  sb.setStyle({style:dark?'DARK':'LIGHT'}).catch(()=>{});
+}
+function haptic(kind){
+  const h=plugin('Haptics');
+  if(h){ (kind==='success'?h.notification({type:'SUCCESS'}):h.impact({style:'LIGHT'})).catch(()=>{}); return; }
+  try{ navigator.vibrate&&navigator.vibrate(kind==='success'?[200,100,200,100,400]:10); }catch(e){}
+}
+let wakeLock=null;
+async function keepAwake(on){
+  const k=plugin('KeepAwake');
+  try{
+    if(k){ on?await k.keepAwake():await k.allowSleep(); return; }
+    if(on && navigator.wakeLock){ wakeLock=await navigator.wakeLock.request('screen'); }
+    else if(!on && wakeLock){ await wakeLock.release(); wakeLock=null; }
+  }catch(e){}
+}
+let toastT=null;
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ===== DAG / NAT ===== */
+const THEME_KEY='aftenret_theme';
+let themeMode='auto';
+try{ themeMode=localStorage.getItem(THEME_KEY)||'auto'; }catch(e){}
+function applyTheme(){
+  const dark = themeMode==='dark' || (themeMode==='auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark?'dark':'light';
+  document.getElementById('themeColor').setAttribute('content', dark?'#111312':'#f5f4f0');
+  const b=document.getElementById('themeBtn');
+  if(b){ b.textContent = themeMode==='auto'?'🌓':themeMode==='dark'?'🌙':'☀️'; }
+  updateStatusBar();
+}
+function cycleTheme(){
+  themeMode = themeMode==='auto'?'light':themeMode==='light'?'dark':'auto';
+  try{ localStorage.setItem(THEME_KEY,themeMode); }catch(e){}
+  applyTheme(); haptic();
+  toast(themeMode==='auto'?'🌓 Følger telefonens indstilling':themeMode==='dark'?'🌙 Nattilstand':'☀️ Dagtilstand');
+}
+try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ if(themeMode==='auto') applyTheme(); }); }catch(e){}
+
+/* ===== OVERRASK MIG ===== */
+let lastSurprise=null;
+function surprise(){
+  let pool=R.filter(match);
+  if(!pool.length){ toast('Ingen retter passer på filtrene'); return; }
+  if(pool.length>1) pool=pool.filter(r=>r.id!==lastSurprise);
+  const r=pool[Math.floor(Math.random()*pool.length)];
+  lastSurprise=r.id; haptic();
+  openDish(r.id,'list');
+  toast('🎲 Hvad med '+r.navn.split(' –')[0].toLowerCase()+' i aften?');
+}
+
+/* ===== DEL INDKØBSLISTE ===== */
+async function shareList(){
+  const lines=['🛒 Indkøbsliste – Aftenret',''];
+  R.filter(r=>shopPicked.has(r.id)).forEach(r=>{
+    const n=personsFor(r.id);
+    const items=r.ing.map((ing,i)=>({ing,key:`${r.id}-${i}`}))
+      .filter(x=>!isPantryStaple(x.ing[1]) && !boughtItems.has(x.key));
+    if(!items.length) return;
+    lines.push(`${emojiFor(r)} ${r.navn} (${n} pers.)`);
+    items.forEach(x=>{ const a=scaleAmt(x.ing[0],n); lines.push('• '+(a?a+' ':'')+x.ing[1]); });
+    lines.push('');
+  });
+  if(lines.length<=2){ toast('🎉 Alt er købt'); return; }
+  const text=lines.join('\n').trim();
+  try{
+    const sh=plugin('Share');
+    if(sh){ await sh.share({title:'Indkøbsliste',text}); return; }
+    if(navigator.share){ await navigator.share({title:'Indkøbsliste',text}); return; }
+    await navigator.clipboard.writeText(text); toast('📋 Listen er kopieret');
+  }catch(e){ /* brugeren lukkede delingsvinduet */ }
 }
 function backToDetail(){openDish(current.id, detailOrigin)}
 function goBack(){go(detailOrigin)}
 
 /* ===== FILTRE + LISTE ===== */
-const FDEF=[["veg","🥗 Vegetar"],["prep","🌙 Kan forberedes aftenen før"],["hurtig","⚡ Under 35 min"]];
+const FDEF=[["veg","🥗 Vegetar"],["hurtig","⚡ Under 35 min"],["let","🔥 Under 700 kcal"],["prep","🌙 Kan forberedes aftenen før"]];
 function renderFilters(){
   document.getElementById('filters').innerHTML=FDEF.map(([k,l])=>
     `<button class="chip" aria-pressed="${filters[k]}" onclick="toggleFilter('${k}')">${l}</button>`).join('');
@@ -444,6 +626,7 @@ function match(r){
   if(filters.veg&&!r.veg)return false;
   if(filters.prep&&!r.prep)return false;
   if(filters.hurtig&&r.tid>35)return false;
+  if(filters.let&&r.kcal>=700)return false;
   return true;
 }
 function renderList(){
@@ -457,6 +640,7 @@ function renderList(){
         <h3><span class="emoji">${emojiFor(r)}</span>${r.navn}${weekPicked.has(r.id)?'<span class="badge">I ugens retter</span>':''}</h3>
         <span class="meta">
           <span class="tag">⏱ ${r.tid} min</span>
+          <span class="tag kcal">🔥 ${r.kcal} kcal</span>
           <span class="tag">${r.veg?'Vegetarisk':'Kød og fisk'}</span>
           ${r.prep?'<span class="tag prep">🌙 Aftenen før</span>':''}
         </span>
@@ -475,7 +659,12 @@ function openDish(id, origin){
   if(origin) detailOrigin = origin;
   current=R.find(r=>r.id===id);
   document.getElementById('detailBack').textContent = detailOrigin==='week' ? '← Ugens retter' : '← Alle retter';
+  renderDetail();
+  go('detail');
+}
+function renderDetail(){
   const inWeek = weekPicked.has(current.id);
+  const n = personsFor(current.id);
   document.getElementById('detailBody').innerHTML=`
     <div class="detail-head ${current.veg?'veg':''}">
       <h2><span class="emoji">${emojiFor(current)}</span>${current.navn}</h2>
@@ -483,19 +672,33 @@ function openDish(id, origin){
     </div>
     <div class="facts">
       <span class="fact">Tid<b>${current.tid} min</b></span>
-      <span class="fact">Portioner<b>2 voksne + 1 barn</b></span>
-      <span class="fact">Type<b>${current.veg?'Vegetarisk':'Kød og fisk'}</b></span>
+      <span class="fact">Kalorier<b>${current.kcal} kcal</b></span>
+      <span class="fact">Type<b>${current.veg?'Vegetar':'Kød/fisk'}</b></span>
+    </div>
+    <div class="servings">
+      <span class="lbl"><b>👥 ${personsLabel(n)}</b><small>${n===BASE_PERSONS?'Opskriftens grundmængde. Skift antal, så regnes ingredienserne om.':`Mængderne er omregnet fra 2 voksne + 1 barn · ca. ${current.kcal*n} kcal i alt`}</small></span>
+      <span class="stepper">
+        <button onclick="changeServings(-1)" aria-label="Færre personer" ${n<=1?'disabled':''}>−</button>
+        <output aria-live="polite">${n}</output>
+        <button onclick="changeServings(1)" aria-label="Flere personer" ${n>=12?'disabled':''}>+</button>
+      </span>
     </div>
     ${current.prep?`<p class="note"><b>Spar tid:</b> ${current.prep}</p>`:''}
     <h2 class="sec-title">Ingredienser</h2>
     <ul class="ing">${current.ing.map(i=>`
-      <li><span class="amt">${i[0]||'–'}</span><span>${i[1]}${i[2]?'<span class="extra">ekstra</span>':''}${!i[2]&&isPantryStaple(i[1])?'<span class="staple">🏠 har du nok</span>':''}</span></li>`).join('')}
+      <li><span class="amt ${n!==BASE_PERSONS&&i[0]?'scaled':''}">${scaleAmt(i[0],n)||'–'}</span><span>${i[1]}${i[2]?'<span class="extra">ekstra</span>':''}${!i[2]&&isPantryStaple(i[1])?'<span class="staple">🏠 har du nok</span>':''}</span></li>`).join('')}
     </ul>
+    <p class="kcalNote">🔥 Kalorier er et skøn pr. person inkl. tilbehør. 🏠 = basisvarer, der ikke kommer på indkøbslisten.</p>
     <h2 class="sec-title">Sådan gør du</h2>
     <ol class="steps">${current.steps.map(s=>`<li>${s.t}</li>`).join('')}</ol>
     <button class="cta" onclick="startCook()">Start madlavning</button>
     <button class="cta ghost" id="weekToggleBtn" onclick="toggleWeek(${current.id})">${inWeek ? 'Fjern fra ugens retter' : 'Tilføj til ugens retter'}</button>`;
-  go('detail');
+}
+function changeServings(d){
+  const n=Math.min(12,Math.max(1,personsFor(current.id)+d));
+  if(n===BASE_PERSONS) delete servings[current.id]; else servings[current.id]=n;
+  haptic();
+  saveState(); renderDetail(); renderShop(); renderWeek();
 }
 
 /* ===== UGENS RETTER ===== */
@@ -538,7 +741,7 @@ function renderWeek(){
     <div class="weekRow">
       <button class="weekRowTitle ${r.veg?'veg':''}" onclick="openDish(${r.id},'week')">
         <span class="emoji">${emojiFor(r)}</span>
-        <span class="weekRowText">${r.navn}<span class="weekRowMeta">⏱ ${r.tid} min${r.prep?' · 🌙 kan forberedes aftenen før':''}</span></span>
+        <span class="weekRowText">${r.navn}<span class="weekRowMeta">⏱ ${r.tid} min · 🔥 ${r.kcal} kcal · 👥 ${personsFor(r.id)}${r.prep?' · 🌙 aftenen før':''}</span></span>
       </button>
       <div class="weekRowActions">
         ${inShop
@@ -551,7 +754,7 @@ function renderWeek(){
 }
 
 /* ===== KOKKE-TILSTAND ===== */
-function startCook(){idx=0;go('cook');renderStep()}
+function startCook(){idx=0;go('cook');renderStep();keepAwake(true)}
 function step(d){
   const n=idx+d;
   if(n<0)return;
@@ -563,7 +766,12 @@ function renderStep(){
   const s=current.steps[idx],tot=current.steps.length;
   document.getElementById('progress').innerHTML=
     current.steps.map((_,i)=>`<span class="${i<=idx?'done':''}"></span>`).join('');
-  document.getElementById('cookCount').textContent=`Trin ${idx+1} af ${tot} · ${current.navn}`;
+  const n=personsFor(current.id);
+  document.getElementById('cookCount').textContent=`Trin ${idx+1} af ${tot} · ${current.navn} · ${n} pers.`;
+  const ci=document.getElementById('cookIngs');
+  const wasOpen=ci.open;
+  ci.innerHTML=`<summary>Ingredienser til ${n} ${n===1?'person':'personer'}</summary><ul>${current.ing.map(i=>{const a=scaleAmt(i[0],n);return `<li>${a?`<b>${a}</b> `:''}${i[1]}</li>`}).join('')}</ul>`;
+  ci.open=wasOpen;
   document.getElementById('cookStep').textContent=s.t;
   document.getElementById('prevBtn').disabled=idx===0;
   document.getElementById('nextBtn').textContent=idx===tot-1?'Færdig':'Næste';
@@ -581,7 +789,9 @@ function toggleTimer(t){
   if(ringing){resetTimer(t);return}
   if(left<=0)left=t;
   document.getElementById('timerBtn').textContent='Pause';
+  unlockAudio();
   endAt=Date.now()+left*1000;
+  scheduleTimerNotification(endAt);
   timerId=setInterval(()=>{
     left=Math.ceil((endAt-Date.now())/1000);
     const c=document.getElementById('clock');
@@ -590,6 +800,7 @@ function toggleTimer(t){
     if(left<=0){
       stopTimer();ringing=true;
       document.getElementById('timer').classList.add('ringing');
+      ringAlarm();
       c.textContent='Klar';
       document.getElementById('timerBtn').textContent='Nulstil';
     }
@@ -601,7 +812,55 @@ function resetTimer(t){
   if(c){c.textContent=fmt(t);document.getElementById('timer').classList.remove('ringing');
         document.getElementById('timerBtn').textContent='Start timer'}
 }
-function stopTimer(){if(timerId){clearInterval(timerId);timerId=null;left=Math.max(0,Math.ceil((endAt-Date.now())/1000))}}
+function stopTimer(){if(timerId){clearInterval(timerId);timerId=null;left=Math.max(0,Math.ceil((endAt-Date.now())/1000));cancelTimerNotification()}}
+
+/* ===== NOTIFIKATION + ALARM NÅR TIMEREN ER FÆRDIG ===== */
+const NOTIF_ID=4711;
+let notifAsked=false, audioCtx=null;
+async function scheduleTimerNotification(at){
+  const step=current&&current.steps[idx]?current.steps[idx].t:'';
+  const title='⏰ Timeren er færdig';
+  const body=(current?current.navn+': ':'')+(step.length>90?step.slice(0,88)+'…':step);
+  const ln=plugin('LocalNotifications');
+  if(ln){
+    try{
+      let p=await ln.checkPermissions();
+      if(p.display!=='granted') p=await ln.requestPermissions();
+      if(p.display!=='granted'){ if(!notifAsked){ toast('Slå notifikationer til i Indstillinger for at få besked'); notifAsked=true; } return; }
+      await ln.cancel({notifications:[{id:NOTIF_ID}]}).catch(()=>{});
+      await ln.schedule({notifications:[{id:NOTIF_ID,title,body,schedule:{at:new Date(at),allowWhileIdle:true}}]});
+    }catch(e){}
+    return;
+  }
+  /* browser: bed om tilladelse, så vi kan vise en notifikation hvis fanen er i baggrunden */
+  try{ if('Notification' in window && Notification.permission==='default' && !notifAsked){ notifAsked=true; Notification.requestPermission(); } }catch(e){}
+}
+function cancelTimerNotification(){
+  const ln=plugin('LocalNotifications');
+  if(ln) ln.cancel({notifications:[{id:NOTIF_ID}]}).catch(()=>{});
+}
+function unlockAudio(){
+  try{ audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); }catch(e){}
+}
+function ringAlarm(){
+  haptic('success');
+  try{
+    if(audioCtx){
+      const t0=audioCtx.currentTime;
+      [0,.35,.7,1.4,1.75,2.1].forEach(d=>{
+        const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+        o.type='sine'; o.frequency.value=880;
+        g.gain.setValueAtTime(0.0001,t0+d); g.gain.exponentialRampToValueAtTime(0.35,t0+d+.02); g.gain.exponentialRampToValueAtTime(0.0001,t0+d+.25);
+        o.connect(g).connect(audioCtx.destination); o.start(t0+d); o.stop(t0+d+.3);
+      });
+    }
+  }catch(e){}
+  try{
+    if(!plugin('LocalNotifications') && 'Notification' in window && Notification.permission==='granted' && document.hidden){
+      new Notification('⏰ Timeren er færdig',{body:current?current.navn:''});
+    }
+  }catch(e){}
+}
 
 /* ===== INDKØB ===== */
 function removeFromShop(id){
@@ -615,6 +874,7 @@ function removeFromShop(id){
 }
 function toggleBought(key){
   boughtItems.has(key) ? boughtItems.delete(key) : boughtItems.add(key);
+  haptic();
   saveState();
   renderShop();
 }
@@ -630,13 +890,14 @@ function shopItemRow(x){
   const bought = boughtItems.has(x.key);
   return `<li class="${bought?'bought':''}">
     <button class="checkCircle ${bought?'checked':''}" onclick="toggleBought('${x.key}')" aria-label="${bought?'Marker som ikke købt':'Marker som købt'}"></button>
-    <span>${x.ing[0]?x.ing[0]+' ':''}${x.ing[1]}${x.ing[2]?'<span class="extra">ekstra</span>':''}</span>
+    <span>${x.amt?x.amt+' ':''}${x.ing[1]}${x.ing[2]?'<span class="extra">ekstra</span>':''}</span>
   </li>`;
 }
 function renderShop(){
   const dishes = R.filter(r=>shopPicked.has(r.id));
   const el = document.getElementById('shopList');
   const countEl = document.getElementById('shopCount');
+  document.getElementById('shareBtn').hidden = !dishes.length;
   if(!dishes.length){
     countEl.textContent = '';
     el.innerHTML = `<p class="empty">🛒 Send en ret til indkøb fra "Ugens retter" – så vises dens ingredienser her for sig selv.</p>`;
@@ -651,7 +912,7 @@ function renderShop(){
   });
   countEl.textContent = `${dishes.length} ${dishes.length===1?'ret':'retter'} · ${totalTodo} vare${totalTodo===1?'':'r'} tilbage${totalDone?` · ${totalDone} købt`:''}`;
   el.innerHTML = dishes.map(r=>{
-    const items = r.ing.map((ing,i)=>({ing,key:`${r.id}-${i}`})).filter(x=>!isPantryStaple(x.ing[1]));
+    const items = r.ing.map((ing,i)=>({ing,amt:scaleAmt(ing[0],personsFor(r.id)),key:`${r.id}-${i}`})).filter(x=>!isPantryStaple(x.ing[1]));
     const todo = items.filter(x=>!boughtItems.has(x.key));
     const done = items.filter(x=>boughtItems.has(x.key));
     const defaultCollapsed = todo.length===0;
@@ -662,6 +923,7 @@ function renderShop(){
         <button class="shopDishToggle" onclick="toggleCollapse(${r.id})" aria-label="${collapsed?'Vis':'Skjul'} ingredienser for ${r.navn}">
           <span class="emoji">${emojiFor(r)}</span>
           <span class="shopDishTitle">${r.navn}</span>
+          <span class="portionTag">👥 ${personsFor(r.id)}</span>
           <span class="shopDishProgress">${done.length}/${items.length}</span>
           <span class="chev">${collapsed?'▸':'▾'}</span>
         </button>
@@ -684,6 +946,7 @@ function renderShop(){
 }
 
 /* ===== INIT ===== */
+applyTheme();
 loadState();
 renderFilters();renderList();renderShop();renderWeek();
 initDb();
