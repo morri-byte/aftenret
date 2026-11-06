@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<title>Aftenret – 13 hverdagsretter</title>
+<style>
+:root{
+  color-scheme:light;
+  --ink:#16221c;
+  --ink-soft:#4a5a51;
+  --paper:#f1f3ec;
+  --card:#ffffff;
+  --line:#d5dace;
+  --saffron:#e3a008;
+  --pomegranate:#96263a;
+  --herb:#2f6b4f;
+  --radius:14px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--paper) !important;color-scheme:light}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper) !important;
+  color:var(--ink) !important;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  font-size:17px;
+  line-height:1.55;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.screen:not(#cook){background:var(--paper) !important}
+h1,h2,h3{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;font-weight:700;line-height:1.15;margin:0}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:3px solid var(--herb);outline-offset:2px;border-radius:6px}
+
+/* ---------- skærme ---------- */
+.screen{display:none;max-width:780px;margin:0 auto;padding:20px 18px 120px}
+.screen.active{display:block}
+
+/* ---------- header ---------- */
+header.top{padding:8px 0 20px}
+header.top h1{font-size:2.15rem;letter-spacing:-.01em}
+header.top p{margin:6px 0 0;color:var(--ink-soft);max-width:46ch}
+
+/* ---------- filtre ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.chip{
+  border:1.5px solid var(--line);background:var(--card);
+  padding:9px 14px;border-radius:999px;font-size:.92rem;font-weight:500;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--ink-soft);font-size:.9rem;margin:10px 2px 14px}
+
+/* ---------- retliste ---------- */
+.dish{
+  display:flex;align-items:stretch;gap:0;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  margin-bottom:10px;overflow:hidden;
+}
+.dish:active{background:#fbfcf9}
+.dish .stripe{width:6px;flex:0 0 6px;background:var(--pomegranate)}
+.dish.veg .stripe{background:var(--herb)}
+.dish .body{padding:14px 16px;flex:1;min-width:0;text-align:left;display:block;width:100%}
+.dish h3{font-size:1.1rem;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;flex-wrap:wrap;gap:2px 0}
+.emoji{margin-right:7px;font-size:1.05em}
+.badge{display:inline-block;margin-left:8px;font-size:.68rem;font-weight:700;color:var(--herb);background:#e3ede7;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.dish .meta{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:7px;font-size:.86rem;color:var(--ink-soft)}
+.tag{display:inline-flex;align-items:center;gap:5px}
+.tag.prep{color:var(--saffron);font-weight:700}
+.dish .side{font-size:.86rem;color:var(--ink-soft);margin-top:6px}
+
+/* ---------- detalje ---------- */
+.back{padding:10px 0 14px;font-weight:700;color:var(--herb)}
+.detail-head h2{font-size:1.85rem;letter-spacing:-.015em}
+.detail-head .sub{color:var(--ink-soft);margin:8px 0 0}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.88rem}
+.fact b{display:block;font-size:1.02rem}
+.note{
+  background:#fdf4de;border-left:5px solid var(--saffron);
+  border-radius:0 10px 10px 0;padding:12px 14px;margin:16px 0;font-size:.95rem;
+}
+.sec-title{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;font-size:1.3rem;margin:28px 0 12px}
+ul.ing{list-style:none;padding:0;margin:0}
+ul.ing li{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:11px 2px;border-bottom:1px solid var(--line);
+}
+ul.ing li:last-child{border-bottom:0}
+ul.ing .amt{font-variant-numeric:tabular-nums;font-weight:700;min-width:78px;flex:0 0 78px}
+ul.ing .extra,.shopIngList .extra{color:var(--saffron);font-weight:700;font-size:.8rem;margin-left:4px}
+ul.ing .staple{color:var(--herb);font-weight:700;font-size:.8rem;margin-left:4px}
+ol.steps{padding-left:0;margin:0;list-style:none;counter-reset:s}
+ol.steps li{
+  counter-increment:s;position:relative;padding:0 0 18px 42px;
+}
+ol.steps li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;
+}
+.cta{
+  display:block;width:100%;background:var(--ink);color:#fff;
+  padding:16px;border-radius:var(--radius);font-weight:700;font-size:1.05rem;margin:26px 0 8px;
+}
+.cta.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--ink)}
+
+/* ---------- kokke-tilstand ---------- */
+#cook{background:var(--ink) !important;color:#fff !important;min-height:100vh}
+#cook .back{color:#a9c9b8}
+.progress{display:flex;gap:5px;margin:8px 0 26px}
+.progress span{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.22)}
+.progress span.done{background:var(--saffron)}
+.cook-step{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;font-size:1.65rem;line-height:1.3;min-height:180px}
+.cook-count{color:#a9c9b8;font-size:.9rem;margin-bottom:10px}
+.timer{
+  background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.28);
+  border-radius:var(--radius);padding:16px;margin:22px 0;text-align:center;
+}
+.timer .clock{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;font-size:2.6rem;font-variant-numeric:tabular-nums}
+.timer button{
+  background:var(--saffron);color:#16221c;font-weight:700;
+  padding:11px 22px;border-radius:999px;margin:8px 4px 0;
+}
+.timer.ringing{border-color:var(--saffron);background:rgba(227,160,8,.22)}
+.navrow{display:flex;gap:10px;margin-top:8px}
+.navrow button{
+  flex:1;padding:16px;border-radius:var(--radius);font-weight:700;
+  background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.25);
+}
+.navrow button.primary{background:var(--saffron);color:#16221c;border-color:var(--saffron)}
+.navrow button:disabled{opacity:.35}
+
+/* ---------- empty state ---------- */
+.empty{color:var(--ink-soft);background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:20px;text-align:center}
+
+/* ---------- bundnav ---------- */
+nav.tabs{
+  position:fixed;left:0;right:0;bottom:0;display:flex;
+  background:var(--card);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);z-index:10;
+}
+nav.tabs button{flex:1;padding:9px 4px 13px;font-size:.72rem;font-weight:700;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:2px}
+.tabIcon{font-size:1.3rem;line-height:1}
+nav.tabs button[aria-current="true"]{color:var(--ink);box-shadow:inset 0 3px 0 var(--ink)}
+nav.tabs.hidden{display:none}
+
+/* ---------- ugens retter ---------- */
+.weekBtn{flex:0 0 48px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.weekBtn input{width:24px;height:24px;accent-color:var(--herb);cursor:pointer}
+.weekRow{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px}
+.weekRowTitle{display:flex;align-items:flex-start;gap:2px;width:100%;text-align:left;margin-bottom:12px}
+.weekRowTitle .emoji{font-size:1.35rem;line-height:1.3;margin-right:8px}
+.weekRowText{display:flex;flex-direction:column;gap:3px;font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;font-weight:700;font-size:1.05rem}
+.weekRowMeta{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-weight:500;font-size:.82rem;color:var(--ink-soft)}
+.weekRowActions{display:flex;gap:8px}
+.weekAction{flex:1;font-size:.85rem;font-weight:700;padding:9px 6px;border-radius:10px;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px}
+.weekAction.shop{background:var(--herb);color:#fff}
+.weekAction.shop.done{background:#e3ede7;border:1.5px solid var(--herb);color:var(--herb)}
+.weekAction.remove{background:var(--paper);border:1.5px solid var(--line);color:var(--pomegranate)}
+.count.small{margin-top:0}
+
+/* ---------- indkøb (per ret) ---------- */
+.shopDish{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.shopDishHead{display:flex;align-items:center;gap:8px}
+.shopDishToggle{display:flex;align-items:center;gap:0;flex:1;min-width:0;text-align:left}
+.shopDishTitle{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;font-weight:700;font-size:1.02rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:8px}
+.shopDishProgress{font-size:.8rem;color:var(--ink-soft);font-weight:700;flex:0 0 auto;margin-right:6px}
+.shopDishToggle .chev{font-size:.72rem;color:var(--ink-soft);flex:0 0 auto}
+.shopDishRemove{font-size:.78rem;font-weight:700;color:var(--pomegranate);padding:4px 8px;flex:0 0 auto}
+.shopSummary{color:var(--ink-soft);font-style:italic;margin:8px 0 0;font-size:.92rem}
+.shopIngList{list-style:none;margin:6px 0 0;padding:0}
+.shopIngList li{display:flex;align-items:center;gap:12px;padding:9px 2px;border-bottom:1px solid var(--line)}
+.shopIngList li:last-child{border-bottom:0}
+.shopIngList li.bought span{color:var(--ink-soft);text-decoration:line-through}
+.shopIngList li.shopAllDone{color:var(--ink-soft);font-style:italic;border-bottom:0}
+.checkCircle{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);background:#fff;flex:0 0 24px;position:relative}
+.checkCircle.checked{background:var(--herb);border-color:var(--herb)}
+.checkCircle.checked::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
+.shopDoneToggle{margin-top:8px;color:var(--ink-soft);font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:6px}
+.shopDoneToggle .chev{font-size:.75rem}
+.doneList{margin-top:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- OVERSIGT -->
+<section id="list" class="screen active">
+  <header class="top">
+    <h1>🍽️ Aftenret</h1>
+    <p>13 hverdagsretter til 2 voksne og et barn. Alle kan laves af én person på under 45 minutter.</p>
+  </header>
+  <div class="filters" id="filters"></div>
+  <p class="count" id="count"></p>
+  <div id="dishes"></div>
+</section>
+
+<!-- DETALJE -->
+<section id="detail" class="screen">
+  <button class="back" id="detailBack" onclick="goBack()">← Alle retter</button>
+  <div id="detailBody"></div>
+</section>
+
+<!-- UGENS RETTER -->
+<section id="week" class="screen">
+  <header class="top">
+    <h1>🗓️ Ugens retter</h1>
+    <p>Retter du har valgt fra "Retter". Send til indkøb når du er klar til at handle ind, eller fjern hvis planen ændrer sig.</p>
+  </header>
+  <p class="count" id="weekCount"></p>
+  <div id="weekList"></div>
+</section>
+
+<!-- KOKKE-TILSTAND -->
+<section id="cook" class="screen">
+  <button class="back" onclick="backToDetail()">← Afslut madlavning</button>
+  <div class="progress" id="progress"></div>
+  <p class="cook-count" id="cookCount"></p>
+  <p class="cook-step" id="cookStep"></p>
+  <div id="timerBox"></div>
+  <div class="navrow">
+    <button id="prevBtn" onclick="step(-1)">Forrige</button>
+    <button id="nextBtn" class="primary" onclick="step(1)">Næste</button>
+  </div>
+</section>
+
+<!-- INDKØB -->
+<section id="shop" class="screen">
+  <header class="top">
+    <h1>🛒 Indkøb</h1>
+    <p>Ingredienser vist per ret. Kryds af når du har købt en vare.</p>
+  </header>
+  <p class="count" id="shopCount"></p>
+  <div id="shopList"></div>
+</section>
+
+<nav class="tabs" id="tabs">
+  <button onclick="go('list')" aria-current="true" id="tabList"><span class="tabIcon">🍽️</span>Retter</button>
+  <button onclick="go('week')" id="tabWeek"><span class="tabIcon">🗓️</span>Ugens retter</button>
+  <button onclick="go('shop')" id="tabShop"><span class="tabIcon">🛒</span>Indkøb</button>
+</nav>
+
+<script>
+/* ===== DATA: 13 retter, mængder til 3 portioner (2 voksne + 1 barn) ===== */
+const R = [
+{id:1,navn:"Kylling i ovn",veg:false,tid:45,prep:"Marinér kyllingen og skær grøntsagerne aftenen før – så er det bare at fylde en bageplade.",
+ side:"Marinerede grøntsager: kartofler, gulerødder, squash og broccoli",
+ ing:[["600 g","kyllingelår eller -bryst i store stykker"],["2 dl","yoghurt naturel"],["3 fed","hvidløg, revet"],["1 tsk","tørret koriander"],["½ tsk","paprika"],["1 spsk","olie"],["1 tsk","salt"],["500 g","kartofler i både"],["3","gulerødder i stave"],["1","squash i både"],["200 g","broccoli i buketter"]],
+ steps:[{"t":"Bland yoghurt, hvidløg, tørret koriander, paprika, olie og salt i en skål. Vend kyllingen i marinaden. Gør det aftenen før hvis du kan – ellers lad det stå mens ovnen varmer."},{"t":"Tænd ovnen på 220°. Skær kartofler, gulerødder, squash og broccoli i mundrette stykker, og vend dem med lidt olie og salt."},{"t":"Læg kyllingen og grøntsagerne på en bageplade med bagepapir."},{"t":"Bag det hele midt i ovnen i 30 minutter, til kyllingen er gennemstegt og grøntsagerne møre.","timer":1800},{"t":"Vend grøntsagerne halvvejs, så de bager jævnt."},{"t":"Anret. Tag et par stykker kylling og lidt grøntsag fra til den lille, skåret i mundrette bidder."}]},
+
+{id:2,navn:"Laks i ovn",veg:false,tid:40,prep:"Marinaden kan røres og lægges på laks og grøntsager om morgenen.",
+ side:"Marinerede kartofler, gulerødder og broccoli",
+ ing:[["500 g","laksefilet uden skind"],["1½ dl","yoghurt naturel"],["1 fed","hvidløg, revet"],["½","citron, saft og skal"],["1 spsk","olivenolie"],["½ tsk","salt"],["500 g","kartofler i både"],["4","gulerødder i skiver"],["200 g","broccoli i buketter"],["","frisk dild eller persille",1]],
+ steps:[{"t":"Tænd ovnen på 200°. Bland yoghurt, hvidløg, citronsaft og -skal, olie og salt."},{"t":"Skær kartofler i både, gulerødder i skiver og broccoli i buketter. Vend dem med halvdelen af marinaden og læg dem på en bageplade."},{"t":"Bag grøntsagerne 15 minutter i forvejen, så de bliver møre nok sammen med laksen.","timer":900},{"t":"Læg laksen ved siden af grøntsagerne på pladen og smør resten af marinaden på laksen."},{"t":"Bag videre i 15 minutter, til laksen lige akkurat deler sig i flager.","timer":900},{"t":"Anret med lidt frisk dild eller persille. Laks til den lille: tjek for ben og mos den let sammen med lidt kartoffel."}]},
+
+{id:3,navn:"Fiskefilet med rugbrød",veg:false,tid:22,prep:"Bland marinaden om morgenen, så mangler du kun at bage fisken.",
+ side:"Rugbrød",
+ ing:[["500 g","fiskefilet (torsk eller rødspætte)"],["1½ dl","yoghurt naturel"],["½","citron, saft"],["1 tsk","salt"],["","rugbrød"]],
+ steps:[{"t":"Tænd ovnen på 200°. Bland yoghurt, citronsaft og salt, og læg fisken i et fad med blandingen over."},{"t":"Bag fisken i 15 minutter.","timer":900},{"t":"Skær rugbrødet mens fisken bager."},{"t":"Anret fisken med rugbrød ved siden af. Til den lille: tjek for ben, og server evt. med lidt rugbrød uden den hårde skorpe."}]},
+
+{id:4,navn:"Kylling-wraps med avocado-dressing",veg:false,tid:35,prep:"Kyllingen kan steges og skæres aftenen før.",
+ side:"Salat, tomat, agurk og revet gulerod",
+ ing:[["500 g","kyllingebryst i strimler"],["1 spsk","olie"],["1 tsk","paprika"],["6","fladbrød eller tortillas"],["2","modne avokadoer"],["1 fed","hvidløg, revet"],["½","citron, saft"],["","salat, tomat, agurk"],["2","gulerødder, revet"],["1","rødløg i tynde skiver"]],
+ steps:[{"t":"Mos avokado med hvidløg, citronsaft og en god knivspids salt til en cremet dressing. Sæt den koldt."},{"t":"Skær kyllingen i strimler og vend den med olie, paprika og salt."},{"t":"Steg kyllingen på en varm pande i 8-10 minutter, til den er gennemstegt og let gylden.","timer":540},{"t":"Snit salat, tomat, agurk og rødløg og riv gulerødderne mens kyllingen steger."},{"t":"Varm fladbrødene kort på en tør pande, 30 sekunder på hver side."},{"t":"Saml wraps ved bordet. Lav en lille åben version til den 3-årige: fladbrød, kylling, revet gulerod og en klat dressing."}]},
+
+{id:5,navn:"Kofta",veg:false,tid:35,prep:"Rul kødbollerne aftenen før – det er de 12 minutter der ellers vælter aftenen.",
+ side:"Palaw ris",
+ ing:[["500 g","hakket kød"],["1","løg, fintrevet"],["1","æg"],["2 spsk","mel"],["1 tsk","tørret koriander"],["1 tsk","salt"],["1 ds","hakkede tomater"],["1 spsk","tomatpuré"],["2 fed","hvidløg"],["1 spsk","olie"],["2½ dl","ris"],["","persille",1]],
+ steps:[{"t":"Ælt kød, revet løg, æg, mel, tørret koriander og salt sammen. Rul 18-20 boller. (Kan gøres aftenen før.)"},{"t":"Sæt risen over: dobbelt vand, salt, låg på, 12 minutter.","timer":720},{"t":"Brun bollerne i olie på en dyb pande, 5 minutter – de skal ikke være gennemstegte endnu.","timer":300},{"t":"Tilsæt hakket hvidløg, tomatpuré og hakkede tomater. Fyld op med et halvt glas vand og smag til med salt."},{"t":"Lad det simre under låg i 15 minutter.","timer":900},{"t":"Drys med persille. Bollerne er bløde og milde – perfekte at dele i to til den lille."}]},
+
+{id:6,navn:"Bolognese med gulerod og bønner",veg:false,tid:38,prep:"Lav saucen aftenen før eller i dobbelt portion og frys halvdelen.",
+ side:"Pasta",
+ ing:[["500 g","hakket kød"],["1","løg"],["2 fed","hvidløg"],["2","gulerødder, revet"],["1 ds","hakkede tomater"],["2 spsk","tomatpuré"],["1 ds","røde bønner, skyllet"],["1 ds","kikærter, skyllet"],["1 tsk","tørret oregano",1],["1 spsk","olivenolie"],["400 g","pasta"],["","revet ost"]],
+ steps:[{"t":"Hak løg og hvidløg, riv gulerødderne. Svits det i olie i 5 minutter.","timer":300},{"t":"Tilsæt kødet og brun det godt igennem, cirka 6 minutter.","timer":360},{"t":"Rør tomatpuré i og lad den stege et minut. Tilsæt hakkede tomater, røde bønner, kikærter, oregano, salt og peber."},{"t":"Lad saucen simre i 18 minutter, så den tykner og smagen samler sig.","timer":1080},{"t":"Kog pastaen efter anvisningen på pakken, mens saucen simrer.","timer":600},{"t":"Server med revet ost. Bønnerne og kikærterne gør retten mere mættende uden at det smager anderledes."}]},
+
+{id:7,navn:"Kyllingspyd (hakket kylling) med grønsager",veg:false,tid:38,prep:"Grøntsagerne kan snittes aftenen før og stå i en boks.",
+ side:"Salat ved siden af",
+ ing:[["500 g","hakket kylling"],["1","peberfrugt"],["1","løg"],["2 fed","hvidløg"],["1 ds","hakkede tomater"],["1 spsk","tomatpuré"],["1 dl","piskefløde"],["1 dl","frosne ærter"],["1 dl","majs (dåse eller frost)"],["1 spsk","olivenolie"],["400 g","pasta"],["","revet ost"]],
+ steps:[{"t":"Hak løg, hvidløg og peberfrugt."},{"t":"Sæt en gryde vand over til pastaen."},{"t":"Brun den hakkede kylling i olie på en dyb pande i 6 minutter, til den falder fra hinanden. Tag den op.","timer":360},{"t":"Svits løg, hvidløg og peberfrugt i samme pande i 5 minutter.","timer":300},{"t":"Tilsæt tomatpuré, hakkede tomater og fløde. Læg kyllingen tilbage, tilsæt ærter og majs, og lad det simre i 10 minutter.","timer":600},{"t":"Kog pastaen imens.","timer":600},{"t":"Vend pastaen i saucen og server med revet ost."}]},
+
+{id:8,navn:"Røde bønner-gryde med ris",veg:true,tid:35,prep:"Gryden bliver kun bedre af at stå til dagen efter.",
+ side:"Ris og en klat yoghurt",
+ ing:[["2 ds","røde bønner, skyllet"],["1","løg"],["3 fed","hvidløg"],["1 ds","hakkede tomater"],["1 spsk","tomatpuré"],["1 tsk","tørret koriander"],["1 tsk","paprika"],["2 spsk","olie"],["2½ dl","ris"],["2 dl","yoghurt naturel"]],
+ steps:[{"t":"Hak løg og hvidløg. Svits det i olie i 5 minutter, til løget er blødt.","timer":300},{"t":"Sæt risen over: dobbelt vand, salt, låg på, 12 minutter.","timer":720},{"t":"Rør tomatpuré, tørret koriander og paprika i løgene og steg et minut."},{"t":"Tilsæt bønner og hakkede tomater plus et halvt glas vand. Lad det simre i 15 minutter.","timer":900},{"t":"Server med ris og en klat yoghurt. Bønnerne kan moses let med en gaffel til den 3-årige."}]},
+
+{id:9,navn:"Bønne-wraps med yoghurt-dressing",veg:true,tid:25,prep:"Bønnemosen holder sig fint et par dage i køleskabet.",
+ side:"Salat, tomat og revet gulerod",
+ ing:[["2 ds","røde bønner eller kikærter"],["2 fed","hvidløg"],["1 tsk","tørret koriander"],["2 spsk","olivenolie"],["½","citron, saft"],["6","fladbrød eller tortillas"],["2 dl","yoghurt naturel"],["","salat, tomat, agurk"],["2","gulerødder, revet"],["125 g","feta",1]],
+ steps:[{"t":"Skyl bønnerne godt af. Hak hvidløget fint."},{"t":"Svits hvidløg og tørret koriander i olie i 2 minutter, kom bønnerne i og varm dem igennem i 4 minutter.","timer":240},{"t":"Mos bønnerne groft med en gaffel og smag til med citronsaft og salt."},{"t":"Rør dressingen: yoghurt, salt og en smule citron. Riv gulerødderne og snit salaten."},{"t":"Varm fladbrødene kort på en tør pande."},{"t":"Saml ved bordet, så alle tager det de kan lide – den nemmeste måde at få en 3-årig til at spise bønner."}]},
+
+{id:10,navn:"Qabuli palaw – afghansk gryderis",veg:true,tid:38,prep:"Gulerødder kan rives aftenen før.",
+ side:"",
+ ing:[["3 dl","basmatiris"],["2 ds","kikærter, skyllet"],["3","gulerødder i tynde strimler"],["1","løg"],["75 g","rosiner"],["1 tsk","tørret koriander"],["½ tsk","kanel",1],["2 spsk","olie"],["6 dl","vand eller bouillon"]],
+ steps:[{"t":"Skyl risen i koldt vand til vandet er klart. Hak løget og skær gulerødderne i tynde strimler."},{"t":"Svits løget i olie i en gryde i 5 minutter, til det er blødt og gyldent.","timer":300},{"t":"Tilsæt gulerødder, rosiner, tørret koriander og kanel, og svits 3 minutter mere.","timer":180},{"t":"Kom ris og kikærter i og rør rundt. Hæld vand eller bouillon ved og tilsæt salt."},{"t":"Kog op, skru ned og lad det stå under tætsluttende låg i 15 minutter.","timer":900},{"t":"Tag gryden af varmen og lad den hvile i 5 minutter uden at løfte låget.","timer":300},{"t":"Rosinerne gør retten sød og børnevenlig – server direkte fra gryden."}]},
+
+{id:11,navn:"Bøf med pomfritter",veg:false,tid:35,prep:"Form bøfferne aftenen før, så mangler du kun at stege dem.",
+ side:"Pomfritter, salat og ketchup/remoulade",
+ ing:[["500 g","hakket oksekød"],["1","løg, fintrevet"],["1","æg"],["1 tsk","tørret koriander"],["1 tsk","salt"],["1 fed","hvidløg, presset"],["600 g","pomfritter (frost)"],["1 spsk","olie"],["","salat, tomat og agurk"],["","ketchup og remoulade"]],
+ steps:[{"t":"Tænd ovnen på 200° og læg pomfritterne på en bageplade."},{"t":"Bag pomfritterne i 20 minutter, til de er gyldne og sprøde.","timer":1200},{"t":"Bland imens hakket oksekød, revet løg, æg, tørret koriander, salt og hvidløg. Form 4 store bøffer. (Kan gøres aftenen før.)"},{"t":"Varm olie på en pande og steg bøfferne 4-5 minutter på hver side, til de er gennemstegte.","timer":270},{"t":"Skær salat, tomat og agurk mens bøfferne steger."},{"t":"Server bøfferne med pomfritter, salat og ketchup/remoulade. Til den lille: skær bøffen i mindre stykker."}]},
+
+{id:12,navn:"Pasta med champignon og fløde",veg:true,tid:30,prep:"Champignon kan renses og skæres aftenen før.",
+ side:"Salat ved siden af",
+ ing:[["400 g","pasta"],["300 g","champignon, i skiver",1],["2 fed","hvidløg"],["1","løg"],["2 dl","piskefløde"],["1 spsk","olie"],["50 g","revet ost"],["1 tsk","salt"]],
+ steps:[{"t":"Sæt en gryde vand over til pastaen og kog den efter posens anvisning.","timer":600},{"t":"Hak løg og hvidløg, og skær champignonerne i skiver."},{"t":"Svits løg og hvidløg i olie i 3 minutter.","timer":180},{"t":"Tilsæt champignon og steg 5 minutter, til de er møre og har sluppet væsken.","timer":300},{"t":"Hæld fløden i og lad saucen simre 5 minutter, til den tykner let.","timer":300},{"t":"Vend pastaen i saucen, smag til med salt og peber, og server med revet ost."}]},
+
+{id:13,navn:"Dal",veg:true,tid:35,prep:"Kan laves helt færdig aftenen før og varmes op.",
+ side:"Ris eller brød",
+ ing:[["3 dl","røde linser, skyllet"],["1","løg"],["3 fed","hvidløg"],["1 ds","hakkede tomater"],["1 tsk","tørret koriander"],["1 tsk","salt"],["2 spsk","olie"],["6 dl","vand eller bouillon"],["2½ dl","ris"]],
+ steps:[{"t":"Hak løg og hvidløg. Svits det i olie i 5 minutter, til løget er blødt.","timer":300},{"t":"Sæt evt. ris over, hvis I spiser det til: dobbelt vand, salt, låg på, 12 minutter.","timer":720},{"t":"Tilsæt tørret koriander og steg et minut mere."},{"t":"Kom linser, hakkede tomater og vand eller bouillon i. Lad det koge op."},{"t":"Skru ned og lad dalen simre under låg i 18 minutter, til linserne er møre og gryden er tyknet.","timer":1080},{"t":"Smag til med salt. Server med ris eller rugbrød – en mild og blød ret der er nem for den 3-årige at spise."}]}
+];
+
+/* ===== STATE ===== */
+let filters={veg:false,prep:false,hurtig:false};
+let current=null,idx=0,timerId=null,left=0,ringing=false,detailOrigin='list';
+const weekPicked=new Set(), shopPicked=new Set(), boughtItems=new Set(), openDoneSections=new Set(), collapsedDishes=new Set();
+let dbRef=null;
+
+/* ===== GEM/HENT (localStorage som hurtig cache + db-capability som pålidelig, holdbar lagring) ===== */
+const STORAGE_KEY = 'aftenret_state_v1';
+function currentPayload(){
+  return { week:[...weekPicked], shop:[...shopPicked], bought:[...boughtItems] };
+}
+function saveState(){
+  const payload = currentPayload();
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); }
+  catch(e){ /* browseren blokerer evt. lokal lagring - db (hvis tilgængelig) klarer det stadig */ }
+  if(dbRef){ dbRef.set(payload).catch(()=>{ /* gemmer igen ved næste ændring */ }); }
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    (s.week||[]).forEach(id=>weekPicked.add(id));
+    (s.shop||[]).forEach(id=>shopPicked.add(id));
+    (s.bought||[]).forEach(k=>boughtItems.add(k));
+  }catch(e){ /* ignorer korrupt/manglende gemt data */ }
+}
+async function initDb(){
+  try{
+    if(typeof claude==='undefined' || !claude.use) return; // kører uden for Claude-artefakt-runtime (fx lokal fil) - localStorage klarer det
+    const db = await claude.use('db');
+    if(!db) return; // ikke tilgængelig for denne visning - localStorage er stadig aktiv
+    dbRef = db.doc('state/main');
+    const snap = await dbRef.get();
+    if(snap.exists){
+      const s = snap.data() || {};
+      weekPicked.clear(); shopPicked.clear(); boughtItems.clear();
+      (s.week||[]).forEach(id=>weekPicked.add(id));
+      (s.shop||[]).forEach(id=>shopPicked.add(id));
+      (s.bought||[]).forEach(k=>boughtItems.add(k));
+    } else if(weekPicked.size || shopPicked.size || boughtItems.size){
+      await dbRef.set(currentPayload());
+    }
+    renderList(); renderWeek(); renderShop();
+  }catch(e){ /* db utilgængelig lige nu - localStorage-data vises stadig */ }
+}
+
+/* ===== FASTE VARER (vises i opskriften, men ikke på indkøbslisten) ===== */
+/* Enkeltord matches mod første "hoved-ord" i ingrediensnavnet (før evt. komma) */
+const PANTRY_SINGLE = ['salt','peber','sukker','hvidløg','løg','mælk','ris','olie','paprika','mel','tomat','porre'];
+/* Hele vendinger matches mod ingrediensnavnet i sin helhed */
+const PANTRY_PHRASE = ['tørret koriander','olivenolie','hakkede tomater'];
+function isPantryStaple(name){
+  const n = (name||'').trim().toLowerCase();
+  if(PANTRY_PHRASE.includes(n)) return true;
+  const firstWord = n.split(',')[0].trim().split(/\s+/)[0];
+  return PANTRY_SINGLE.includes(firstWord);
+}
+
+/* ===== EMOJI PR. RET ===== */
+function emojiFor(r){
+  const n = r.navn.toLowerCase();
+  if(n.includes('laks')||n.includes('fisk')) return '🐟';
+  if(n.includes('bøf')) return '🥩';
+  if(n.includes('dal')||n.includes('linse')) return '🍲';
+  if(n.includes('pasta')) return '🍝';
+  if(r.veg) return '🥗';
+  return '🍗';
+}
+
+/* ===== NAVIGATION ===== */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('tabs').classList.toggle('hidden',id==='cook'||id==='detail');
+  document.getElementById('tabList').setAttribute('aria-current',id==='list');
+  document.getElementById('tabWeek').setAttribute('aria-current',id==='week');
+  document.getElementById('tabShop').setAttribute('aria-current',id==='shop');
+  window.scrollTo(0,0);
+  if(id!=='cook') stopTimer();
+}
+function backToDetail(){openDish(current.id, detailOrigin)}
+function goBack(){go(detailOrigin)}
+
+/* ===== FILTRE + LISTE ===== */
+const FDEF=[["veg","🥗 Vegetar"],["prep","🌙 Kan forberedes aftenen før"],["hurtig","⚡ Under 35 min"]];
+function renderFilters(){
+  document.getElementById('filters').innerHTML=FDEF.map(([k,l])=>
+    `<button class="chip" aria-pressed="${filters[k]}" onclick="toggleFilter('${k}')">${l}</button>`).join('');
+}
+function toggleFilter(k){filters[k]=!filters[k];renderFilters();renderList()}
+function match(r){
+  if(filters.veg&&!r.veg)return false;
+  if(filters.prep&&!r.prep)return false;
+  if(filters.hurtig&&r.tid>35)return false;
+  return true;
+}
+function renderList(){
+  const vis=R.filter(match);
+  document.getElementById('count').textContent=
+    vis.length+(vis.length===1?" ret":" retter")+" · "+vis.filter(r=>r.veg).length+" vegetariske";
+  document.getElementById('dishes').innerHTML=vis.length?vis.map(r=>`
+    <div class="dish ${r.veg?'veg':''}">
+      <span class="stripe"></span>
+      <button class="body" onclick="openDish(${r.id},'list')">
+        <h3><span class="emoji">${emojiFor(r)}</span>${r.navn}${weekPicked.has(r.id)?'<span class="badge">I ugens retter</span>':''}</h3>
+        <span class="meta">
+          <span class="tag">⏱ ${r.tid} min</span>
+          <span class="tag">${r.veg?'Vegetarisk':'Kød og fisk'}</span>
+          ${r.prep?'<span class="tag prep">🌙 Aftenen før</span>':''}
+        </span>
+        ${r.side ? `<span class="side">${r.side}</span>` : ''}
+      </button>
+      <label class="weekBtn" title="Tilføj til ugens retter">
+        <input type="checkbox" aria-label="Tilføj ${r.navn} til ugens retter" ${weekPicked.has(r.id)?'checked':''} onchange="toggleWeek(${r.id})">
+
+      </label>
+    </div>`).join(''):
+    `<p class="empty">Ingen retter passer på de valgte filtre. Slå et af dem fra.</p>`;
+}
+
+/* ===== DETALJE ===== */
+function openDish(id, origin){
+  if(origin) detailOrigin = origin;
+  current=R.find(r=>r.id===id);
+  document.getElementById('detailBack').textContent = detailOrigin==='week' ? '← Ugens retter' : '← Alle retter';
+  const inWeek = weekPicked.has(current.id);
+  document.getElementById('detailBody').innerHTML=`
+    <div class="detail-head">
+      <h2><span class="emoji">${emojiFor(current)}</span>${current.navn}</h2>
+      ${current.side ? `<p class="sub">${current.side}</p>` : ''}
+    </div>
+    <div class="facts">
+      <span class="fact">Tid<b>${current.tid} min</b></span>
+      <span class="fact">Portioner<b>2 voksne + 1 barn</b></span>
+      <span class="fact">Type<b>${current.veg?'Vegetarisk':'Kød og fisk'}</b></span>
+    </div>
+    ${current.prep?`<p class="note"><b>Spar tid:</b> ${current.prep}</p>`:''}
+    <h2 class="sec-title">Ingredienser</h2>
+    <ul class="ing">${current.ing.map(i=>`
+      <li><span class="amt">${i[0]||'–'}</span><span>${i[1]}${i[2]?'<span class="extra">ekstra</span>':''}${!i[2]&&isPantryStaple(i[1])?'<span class="staple">🏠 har du nok</span>':''}</span></li>`).join('')}
+    </ul>
+    <h2 class="sec-title">Sådan gør du</h2>
+    <ol class="steps">${current.steps.map(s=>`<li>${s.t}</li>`).join('')}</ol>
+    <button class="cta" onclick="startCook()">Start madlavning</button>
+    <button class="cta ghost" id="weekToggleBtn" onclick="toggleWeek(${current.id})">${inWeek ? 'Fjern fra ugens retter' : 'Tilføj til ugens retter'}</button>`;
+  go('detail');
+}
+
+/* ===== UGENS RETTER ===== */
+function toggleWeek(id){
+  weekPicked.has(id) ? weekPicked.delete(id) : weekPicked.add(id);
+  saveState();
+  renderList();
+  renderWeek();
+  if(current && current.id===id && document.getElementById('weekToggleBtn')){
+    document.getElementById('weekToggleBtn').textContent = weekPicked.has(id) ? 'Fjern fra ugens retter' : 'Tilføj til ugens retter';
+  }
+}
+function removeFromWeek(id){
+  weekPicked.delete(id);
+  saveState();
+  renderList();
+  renderWeek();
+  if(current && current.id===id && document.getElementById('weekToggleBtn')){
+    document.getElementById('weekToggleBtn').textContent = 'Tilføj til ugens retter';
+  }
+}
+function sendToShop(id){
+  shopPicked.add(id);
+  saveState();
+  renderShop();
+  renderWeek();
+}
+function renderWeek(){
+  const dishes = R.filter(r=>weekPicked.has(r.id));
+  const el = document.getElementById('weekList');
+  if(!dishes.length){
+    el.innerHTML = `<p class="empty">🗓️ Vælg retter i "Retter" (afkryds kortet, eller åbn retten og tryk "Tilføj til ugens retter") – så samler vi dem her.</p>`;
+    return;
+  }
+  const meat = dishes.filter(r=>!r.veg).length, veg = dishes.length-meat;
+  document.getElementById('weekCount').textContent = `${dishes.length} ${dishes.length===1?'ret':'retter'} planlagt · ${meat} kød/fisk · ${veg} vegetarisk${veg===1?'':'e'}`;
+  el.innerHTML = dishes.map(r=>{
+    const inShop = shopPicked.has(r.id);
+    return `
+    <div class="weekRow">
+      <button class="weekRowTitle" onclick="openDish(${r.id},'week')">
+        <span class="emoji">${emojiFor(r)}</span>
+        <span class="weekRowText">${r.navn}<span class="weekRowMeta">⏱ ${r.tid} min${r.prep?' · 🌙 kan forberedes aftenen før':''}</span></span>
+      </button>
+      <div class="weekRowActions">
+        ${inShop
+          ? `<span class="weekAction shop done">🛒 I indkøb</span>`
+          : `<button class="weekAction shop" onclick="sendToShop(${r.id})">🛒 Send til indkøb</button>`}
+        <button class="weekAction remove" onclick="removeFromWeek(${r.id})">✕ Fjern</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ===== KOKKE-TILSTAND ===== */
+function startCook(){idx=0;go('cook');renderStep()}
+function step(d){
+  const n=idx+d;
+  if(n<0)return;
+  if(n>=current.steps.length){backToDetail();return}
+  idx=n;renderStep();window.scrollTo(0,0);
+}
+function renderStep(){
+  stopTimer();
+  const s=current.steps[idx],tot=current.steps.length;
+  document.getElementById('progress').innerHTML=
+    current.steps.map((_,i)=>`<span class="${i<=idx?'done':''}"></span>`).join('');
+  document.getElementById('cookCount').textContent=`Trin ${idx+1} af ${tot} · ${current.navn}`;
+  document.getElementById('cookStep').textContent=s.t;
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===tot-1?'Færdig':'Næste';
+  document.getElementById('timerBox').innerHTML=s.timer?`
+    <div class="timer" id="timer">
+      <div class="clock" id="clock">${fmt(s.timer)}</div>
+      <button onclick="toggleTimer(${s.timer})" id="timerBtn">Start timer</button>
+      <button onclick="resetTimer(${s.timer})">Nulstil</button>
+    </div>`:'';
+  left=s.timer||0;ringing=false;
+}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function toggleTimer(t){
+  if(timerId){stopTimer();document.getElementById('timerBtn').textContent='Fortsæt';return}
+  if(ringing){resetTimer(t);return}
+  if(left<=0)left=t;
+  document.getElementById('timerBtn').textContent='Pause';
+  timerId=setInterval(()=>{
+    left--;
+    const c=document.getElementById('clock');
+    if(!c){stopTimer();return}
+    c.textContent=fmt(Math.max(left,0));
+    if(left<=0){
+      stopTimer();ringing=true;
+      document.getElementById('timer').classList.add('ringing');
+      c.textContent='Klar';
+      document.getElementById('timerBtn').textContent='Nulstil';
+    }
+  },1000);
+}
+function resetTimer(t){
+  stopTimer();left=t;ringing=false;
+  const c=document.getElementById('clock');
+  if(c){c.textContent=fmt(t);document.getElementById('timer').classList.remove('ringing');
+        document.getElementById('timerBtn').textContent='Start timer'}
+}
+function stopTimer(){if(timerId){clearInterval(timerId);timerId=null}}
+
+/* ===== INDKØB ===== */
+function removeFromShop(id){
+  shopPicked.delete(id);
+  openDoneSections.delete(id);
+  collapsedDishes.delete(id);
+  [...boughtItems].forEach(k=>{ if(Number(k.split('-')[0])===id) boughtItems.delete(k); });
+  saveState();
+  renderShop();
+  renderWeek();
+}
+function toggleBought(key){
+  boughtItems.has(key) ? boughtItems.delete(key) : boughtItems.add(key);
+  saveState();
+  renderShop();
+}
+function toggleDoneSection(id){
+  openDoneSections.has(id) ? openDoneSections.delete(id) : openDoneSections.add(id);
+  renderShop();
+}
+function toggleCollapse(id){
+  collapsedDishes.has(id) ? collapsedDishes.delete(id) : collapsedDishes.add(id);
+  renderShop();
+}
+function shopItemRow(x){
+  const bought = boughtItems.has(x.key);
+  return `<li class="${bought?'bought':''}">
+    <button class="checkCircle ${bought?'checked':''}" onclick="toggleBought('${x.key}')" aria-label="${bought?'Marker som ikke købt':'Marker som købt'}"></button>
+    <span>${x.ing[0]?x.ing[0]+' ':''}${x.ing[1]}${x.ing[2]?'<span class="extra">ekstra</span>':''}</span>
+  </li>`;
+}
+function renderShop(){
+  const dishes = R.filter(r=>shopPicked.has(r.id));
+  const el = document.getElementById('shopList');
+  const countEl = document.getElementById('shopCount');
+  if(!dishes.length){
+    countEl.textContent = '';
+    el.innerHTML = `<p class="empty">🛒 Send en ret til indkøb fra "Ugens retter" – så vises dens ingredienser her for sig selv.</p>`;
+    return;
+  }
+  let totalTodo=0, totalDone=0;
+  dishes.forEach(r=>{
+    r.ing.forEach((ing,i)=>{
+      if(isPantryStaple(ing[1])) return;
+      boughtItems.has(`${r.id}-${i}`) ? totalDone++ : totalTodo++;
+    });
+  });
+  countEl.textContent = `${dishes.length} ${dishes.length===1?'ret':'retter'} · ${totalTodo} vare${totalTodo===1?'':'r'} tilbage${totalDone?` · ${totalDone} købt`:''}`;
+  el.innerHTML = dishes.map(r=>{
+    const items = r.ing.map((ing,i)=>({ing,key:`${r.id}-${i}`})).filter(x=>!isPantryStaple(x.ing[1]));
+    const todo = items.filter(x=>!boughtItems.has(x.key));
+    const done = items.filter(x=>boughtItems.has(x.key));
+    const defaultCollapsed = todo.length===0;
+    const collapsed = collapsedDishes.has(r.id) ? !defaultCollapsed : defaultCollapsed;
+    return `
+    <div class="shopDish">
+      <div class="shopDishHead">
+        <button class="shopDishToggle" onclick="toggleCollapse(${r.id})" aria-label="${collapsed?'Vis':'Skjul'} ingredienser for ${r.navn}">
+          <span class="emoji">${emojiFor(r)}</span>
+          <span class="shopDishTitle">${r.navn}</span>
+          <span class="shopDishProgress">${done.length}/${items.length}</span>
+          <span class="chev">${collapsed?'▸':'▾'}</span>
+        </button>
+        <button class="shopDishRemove" onclick="removeFromShop(${r.id})">✕ Fjern</button>
+      </div>
+      ${collapsed
+        ? `<p class="shopSummary">${items.length===0 ? 'Du har allerede alt til denne ret derhjemme 🎉' : defaultCollapsed ? 'Alt er købt til denne ret 🎉' : `${todo.length} vare${todo.length===1?'':'r'} mangler endnu`}</p>`
+        : `
+      <ul class="shopIngList">
+        ${todo.length ? todo.map(shopItemRow).join('') : '<li class="shopAllDone">Alt er købt til denne ret 🎉</li>'}
+      </ul>
+      ${done.length ? `
+        <button class="shopDoneToggle" onclick="toggleDoneSection(${r.id})">
+          <span class="chev">${openDoneSections.has(r.id)?'▾':'▸'}</span> Købt (${done.length})
+        </button>
+        ${openDoneSections.has(r.id) ? `<ul class="shopIngList doneList">${done.map(shopItemRow).join('')}</ul>` : ''}
+      ` : ''}`}
+    </div>`;
+  }).join('');
+}
+
+/* ===== INIT ===== */
+loadState();
+renderFilters();renderList();renderShop();renderWeek();
+initDb();
+</script>
+</body>
+</html>
