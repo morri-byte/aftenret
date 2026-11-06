@@ -20,9 +20,8 @@ Det skal gøres på en **Mac med Xcode** (version 16 eller nyere). Apple tillade
 
 ### 2. Hent og forbered projektet
 ```bash
-git clone https://github.com/gemshagen-a11y/heatshift.git
-cd heatshift
-git checkout claude/hverdagsretter-app-dev-1paaod
+git clone https://github.com/morri-byte/aftenret.git
+cd aftenret
 npm install
 npx cap sync ios      # kopierer www/ ind i iOS-projektet
 npx cap open ios      # åbner Xcode
