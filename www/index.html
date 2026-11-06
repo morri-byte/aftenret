@@ -427,6 +427,8 @@ function go(id){
   document.getElementById('tabShop').setAttribute('aria-current',id==='shop');
   window.scrollTo(0,0);
   if(id!=='cook') stopTimer();
+  /* iOS-app: lys statuslinje-tekst i den mørke kokketilstand */
+  try{ const sb=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.StatusBar; if(sb) sb.setStyle({style:id==='cook'?'DARK':'LIGHT'}).catch(()=>{}); }catch(e){}
 }
 function backToDetail(){openDish(current.id, detailOrigin)}
 function goBack(){go(detailOrigin)}

@@ -1,0 +1,19 @@
+{
+  "name": "aftenret",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aftenret – hverdagsretter, ugeplan og indkøbsliste",
+  "scripts": {
+    "sync": "npx cap sync ios",
+    "open": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/ios": "^8.6.0",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0"
+  }
+}
